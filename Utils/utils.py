@@ -5,7 +5,8 @@ import torchvision
 import torchvision.transforms as transforms
 import sys
 
-
+def set_figsize(figsize=(3.5, 2.5)):
+    plt.rcParams['figure.figsize'] = figsize
 
 def data_iter(batch_size, features, labels):
     num_examples = len(features)
@@ -88,4 +89,18 @@ def train_ch3(net, train_iter, test_iter, loss, num_epochs,batch_size, params=No
         print('epoch %d, loss %.4f, train acc %.3f, test acc %.3f'
               % (epoch + 1, train_l_sum / n, train_acc_sum / n, test_acc))
 
+class FlattenLayer(torch.nn.Module):
+    def __init__(self):
+        super(FlattenLayer, self).__init__()
 
+    def forward(self, x):
+        return x.view(x.shape[0], -1)
+
+def semilogy(x_vals, y_vals, x_label, y_label, x2_vals=None, y2_vals=None, legend=None, figsize=(3.5, 2.5)):
+    set_figsize(figsize)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    plt.semilogy(x_vals, y_vals)
+    if x2_vals and y2_vals:
+        plt.semilogy(x2_vals, y2_vals, linestyle=':')
+        plt.legend(legend)
